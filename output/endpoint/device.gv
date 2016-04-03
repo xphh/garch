@@ -3,19 +3,24 @@ edge[fontname="simsun"];
 node[fontname="simsun"];
 graph[fontname="simsun"];
 label = "";
+module_node_0[shape=circle, width=.2, style=filled, label=""];
+module_node_0->device_node_0[fontsize=9, label="设备"];
+module_node_1[shape=box, label="设备管理服务"];
+module_node_2[height=.3, fixedsize=true, label="slb"];
+module_node_2->module_node_1;
+device_node_1->module_node_2[fontsize=9, label="设备长连接\n[tcp]"];
+module_node_3[shape=box, label="Nginx"];
+module_node_4[height=.3, fixedsize=true, label="slb"];
+module_node_4->module_node_3;
+device_node_2->module_node_4[fontsize=9, label="设备报警API\n[http]"];
+subgraph cluster_module_node_5 {
+style = filled;
+color = lightgrey;
+label = "";
 device_node_0[shape=box, peripheries=2, label="设备"];
-device_node_1[shape=circle, width=.2, style=filled, label=""];
-device_node_1->device_node_0[fontsize=9, label="设备"];
-device_node_2[shape=polygon, skew=.5, style=filled, label="上线"];
+device_node_1[shape=polygon, skew=.5, label="上线"];
+device_node_0->device_node_1[style=bold, arrowhead=none];
+device_node_2[shape=polygon, skew=.5, label="报警"];
 device_node_0->device_node_2[style=bold, arrowhead=none];
-device_node_3[shape=box, label="设备管理服务"];
-device_node_4[height=.3, fixedsize=true, label="slb"];
-device_node_4->device_node_3;
-device_node_2->device_node_4[fontsize=9, label="设备长连接\n[tcp]"];
-device_node_5[shape=polygon, skew=.5, style=filled, label="报警"];
-device_node_0->device_node_5[style=bold, arrowhead=none];
-device_node_6[shape=box, label="Nginx"];
-device_node_7[height=.3, fixedsize=true, label="slb"];
-device_node_7->device_node_6;
-device_node_5->device_node_7[fontsize=9, label="设备报警API\n[http]"];
+}
 }

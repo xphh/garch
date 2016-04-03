@@ -3,13 +3,18 @@ edge[fontname="simsun"];
 node[fontname="simsun"];
 graph[fontname="simsun"];
 label = "";
+module_node_0[shape=circle, width=.2, style=filled, label=""];
+module_node_0->pushserver_node_0[fontsize=9, label="推送接口\n[http]"];
+module_node_1[shape=circle, width=.2, style=filled, label=""];
+module_node_1->pushserver_node_0[fontsize=9, label="推送长连接\n[tcp]"];
+subgraph cluster_module_node_2 {
+style = filled;
+color = lightgrey;
+label = "";
 pushserver_node_0[shape=box, peripheries=2, label="推送服务"];
-pushserver_node_1[shape=circle, width=.2, style=filled, label=""];
-pushserver_node_1->pushserver_node_0[fontsize=9, label="推送接口\n[http]"];
-pushserver_node_2[shape=circle, width=.2, style=filled, label=""];
-pushserver_node_2->pushserver_node_0[fontsize=9, label="推送长连接\n[tcp]"];
-pushserver_node_3[shape=polygon, skew=.5, style=filled, label="客户端上线"];
-pushserver_node_0->pushserver_node_3[style=bold, arrowhead=none];
-pushserver_node_4[shape=polygon, skew=.5, style=filled, label="推送消息"];
-pushserver_node_0->pushserver_node_4[style=bold, arrowhead=none];
+pushserver_node_1[shape=polygon, skew=.5, label="客户端上线"];
+pushserver_node_0->pushserver_node_1[style=bold, arrowhead=none];
+pushserver_node_2[shape=polygon, skew=.5, label="推送消息"];
+pushserver_node_0->pushserver_node_2[style=bold, arrowhead=none];
+}
 }

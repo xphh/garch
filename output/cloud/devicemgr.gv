@@ -3,17 +3,22 @@ edge[fontname="simsun"];
 node[fontname="simsun"];
 graph[fontname="simsun"];
 label = "";
+module_node_0[shape=circle, width=.2, style=filled, label=""];
+module_node_1[height=.3, fixedsize=true, label="slb"];
+module_node_1->devicemgr_node_0;
+module_node_0->module_node_1[fontsize=9, label="设备长连接\n[tcp]"];
+module_node_2[shape=circle, width=.2, style=filled, label=""];
+module_node_2->devicemgr_node_0[fontsize=9, label="设备信令\n[http]"];
+module_node_3[shape=box, label="推送服务"];
+devicemgr_node_1->module_node_3[fontsize=9, label="推送接口\n[http]"];
+subgraph cluster_module_node_4 {
+style = filled;
+color = lightgrey;
+label = "";
 devicemgr_node_0[shape=box, peripheries=2, label="设备管理服务"];
-devicemgr_node_1[shape=circle, width=.2, style=filled, label=""];
-devicemgr_node_2[height=.3, fixedsize=true, label="slb"];
-devicemgr_node_2->devicemgr_node_0;
-devicemgr_node_1->devicemgr_node_2[fontsize=9, label="设备长连接\n[tcp]"];
-devicemgr_node_3[shape=circle, width=.2, style=filled, label=""];
-devicemgr_node_3->devicemgr_node_0[fontsize=9, label="设备信令\n[http]"];
-devicemgr_node_4[shape=polygon, skew=.5, style=filled, label="设备上线"];
-devicemgr_node_0->devicemgr_node_4[style=bold, arrowhead=none];
-devicemgr_node_5[shape=box, label="推送服务"];
-devicemgr_node_4->devicemgr_node_5[fontsize=9, label="推送接口\n[http]"];
-devicemgr_node_6[shape=polygon, skew=.5, style=filled, label="设备信令"];
-devicemgr_node_0->devicemgr_node_6[style=bold, arrowhead=none];
+devicemgr_node_1[shape=polygon, skew=.5, label="设备上线"];
+devicemgr_node_0->devicemgr_node_1[style=bold, arrowhead=none];
+devicemgr_node_2[shape=polygon, skew=.5, label="设备信令"];
+devicemgr_node_0->devicemgr_node_2[style=bold, arrowhead=none];
+}
 }

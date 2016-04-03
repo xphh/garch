@@ -87,7 +87,7 @@ class ArchGraph:
 		return n
 	def addAction(self, module, label):
 		n = self.getNode()
-		self.gv += n + '[shape=polygon, skew=.5, style=filled, label="' + label + '"];\n'
+		self.gv += n + '[shape=polygon, skew=.5, label="' + label + '"];\n'
 		self.gv += module + '->' + n + '[style=bold, arrowhead=none];\n'
 		return n
 	def addInterface(self, module, front):
@@ -153,8 +153,9 @@ def build_main_graph(main):
 	ag.output('main')
 
 def build_module_graph(main, group, module):
-	ag = ArchGraph(module.attrib['id'], '')
-	module_node = ag.addCurrentModule(module.attrib['name'])
+	ag = ArchGraph('module', '')
+	mg = ArchGraph(module.attrib['id'], '')
+	module_node = mg.addCurrentModule(module.attrib['name'])
 	for interface in module.content.findall('./interfaces/interface'):
 		starter_node = ag.addStarter()
 		label = interface.attrib['name']
@@ -163,7 +164,7 @@ def build_module_graph(main, group, module):
 		if_node = ag.addInterface(module_node, front)
 		ag.linkInterface(starter_node, if_node, label, type)
 	for action in module.content.findall('./actions/action'):
-		action_node = ag.addAction(module_node, action.attrib['name'])
+		action_node = mg.addAction(module_node, action.attrib['name'])
 		for a_interface in action.findall('interface'):
 			interface_to = a_interface.attrib['to']
 			ifarr = string.split(interface_to, '.')
@@ -178,6 +179,7 @@ def build_module_graph(main, group, module):
 			front = to_interface.attrib.get('front')
 			if_node = ag.addInterface(to_module_node, front)
 			ag.linkInterface(action_node, if_node, to_interface.attrib['name'], type)
+	ag.addSubGraph(mg)
 	ag.output(group.attrib['id'] + '/' + module.attrib['id'])
 	
 if __name__ == '__main__':
