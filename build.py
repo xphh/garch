@@ -61,17 +61,17 @@ def build_module(main, group, module):
 	output2file(group.attrib['id'] + '/' + module.attrib['id'] + '.md', md);
 
 class ArchGraph:
-	id = 0
+	seq = 0
 	gv = ''
+	id = ''
 	name = ''
-	title = ''
-	def __init__(self, name, title):
+	def __init__(self, id, name):
+		self.id = id
 		self.name = name
-		self.title = title
-		self.gv += 'label = "' + self.title + '";\n'
+		self.gv += 'label = "' + self.name + '";\n'
 	def getNode(self):
-		node = self.name + '_node_' + str(self.id)
-		self.id += 1
+		node = self.id + '_node_' + str(self.seq)
+		self.seq += 1
 		return node
 	def addStarter(self):
 		n = self.getNode()
@@ -90,14 +90,17 @@ class ArchGraph:
 		self.gv += n + '[shape=polygon, skew=.5, style=filled, label="' + label + '"];\n'
 		self.gv += module + '->' + n + '[style=bold, arrowhead=none];\n'
 		return n
-	def addInterface(self, module, to, label, type, front):
-		if type != None:
-			label += '\\n[' + type + ']'
+	def addInterface(self, module, front):
 		if front != None:
 			n = self.getNode()
 			self.gv += n + '[height=.3, fixedsize=true, label="' + front + '"];\n'
-			self.gv += n + '->' + to + ';\n'
-			to = n
+			self.gv += n + '->' + module + ';\n'
+			return n
+		else:
+			return module
+	def linkInterface(self, module, to, label, type):
+		if type != None:
+			label += '\\n[' + type + ']'
 		self.gv += module + '->' + to + '[fontsize=9, label="' + label + '"];\n'
 	def addSubGraph(self, graph):
 		n = self.getNode()
@@ -123,11 +126,16 @@ class ArchGraph:
 		
 def build_main_graph(main):
 	ag = ArchGraph('main', '')
+	# draw all modules
 	for group in main.findall('group'):
-		subg = ArchGraph(group.attrib['id'], group.attrib['name'])
+		mg = ArchGraph(group.attrib['id'], group.attrib['name'])
 		for module in group.findall('module'):
-			module.graph_node = subg.addModule(module.attrib['name'])
-		ag.addSubGraph(subg)
+			module.graph_node = mg.addModule(module.attrib['name'])
+			for interface in module.content.findall('./interfaces/interface'):
+				front = interface.attrib.get('front')
+				interface.graph_node = mg.addInterface(module.graph_node, front)
+		ag.addSubGraph(mg)
+	# link all interfaces
 	for group in main.findall('group'):
 		for module in group.findall('module'):
 			for action in module.content.findall('./actions/action'):
@@ -141,8 +149,7 @@ def build_main_graph(main):
 					to_interface_id = ifarr[2]
 					to_interface = to_module.content.find("./interfaces/interface[@id='" + to_interface_id + "']")
 					type = to_interface.attrib.get('type')
-					front = to_interface.attrib.get('front')
-					ag.addInterface(module.graph_node, to_module.graph_node, to_interface.attrib['name'], type, front)
+					ag.linkInterface(module.graph_node, to_interface.graph_node, to_interface.attrib['name'], type)
 	ag.output('main')
 
 def build_module_graph(main, group, module):
@@ -153,7 +160,8 @@ def build_module_graph(main, group, module):
 		label = interface.attrib['name']
 		type = interface.attrib.get('type')
 		front = interface.attrib.get('front')
-		ag.addInterface(starter_node, module_node, label, type, front)
+		if_node = ag.addInterface(module_node, front)
+		ag.linkInterface(starter_node, if_node, label, type)
 	for action in module.content.findall('./actions/action'):
 		action_node = ag.addAction(module_node, action.attrib['name'])
 		for a_interface in action.findall('interface'):
@@ -168,7 +176,8 @@ def build_module_graph(main, group, module):
 			to_module_node = ag.addModule(to_module.attrib['name'])
 			type = to_interface.attrib.get('type')
 			front = to_interface.attrib.get('front')
-			ag.addInterface(action_node, to_module_node, to_interface.attrib['name'], type, front)
+			if_node = ag.addInterface(to_module_node, front)
+			ag.linkInterface(action_node, if_node, to_interface.attrib['name'], type)
 	ag.output(group.attrib['id'] + '/' + module.attrib['id'])
 	
 if __name__ == '__main__':
