@@ -1,4 +1,4 @@
-# [demo系统架构](../) - 设备管理服务
+# [demo系统架构](../Home.md) - 设备管理服务
 
 ![](devicemgr.gv.png)
 

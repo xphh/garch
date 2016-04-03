@@ -27,11 +27,11 @@ def build_main(main):
 	for group in main.findall('group'):
 		md += '\n### Group ' + group.attrib['name'] + ' `' + group.attrib['scope'] + '`\n\n'
 		for module in group.findall('module'):
-			md += '* [' + module.attrib['name'] + '](' + group.attrib['id'] + '/' + module.attrib['id'] + ')\n'
+			md += '* [' + module.attrib['name'] + '](' + group.attrib['id'] + '/' + module.attrib['id'] + '.md)\n'
 	output2file('Home.md', md);
 	
 def build_module(main, group, module):
-	md = '# [' + main.attrib['title'] + '](../) - ' + module.attrib['name'] + '\n'
+	md = '# [' + main.attrib['title'] + '](../Home.md) - ' + module.attrib['name'] + '\n'
 	md += '\n![](' + module.attrib['id'] + '.gv.png)\n'
 	for action in module.content.findall('./actions/action'):
 		interface_id = action.attrib['interface']

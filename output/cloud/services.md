@@ -1,4 +1,4 @@
-# [demo系统架构](../) - 业务服务
+# [demo系统架构](../Home.md) - 业务服务
 
 ![](services.gv.png)
 

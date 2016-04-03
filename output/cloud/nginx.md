@@ -1,4 +1,4 @@
-# [demo系统架构](../) - Nginx
+# [demo系统架构](../Home.md) - Nginx
 
 ![](nginx.gv.png)
 

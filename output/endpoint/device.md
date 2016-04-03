@@ -1,4 +1,4 @@
-# [demo系统架构](../) - 设备
+# [demo系统架构](../Home.md) - 设备
 
 ![](device.gv.png)
 

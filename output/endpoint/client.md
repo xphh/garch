@@ -1,4 +1,4 @@
-# [demo系统架构](../) - 客户端
+# [demo系统架构](../Home.md) - 客户端
 
 ![](client.gv.png)
 
