@@ -11,6 +11,7 @@
 然后调用build.py生成markdown文档，调用方法：`build.py path/to/main.xml`。markdown文档中包含了自动生成的系统架构图（PNG格式）。
 
 注意事项：
+
 1. 需要在build.py中设定全局变量`OUTPUT`，用于指定文档输出路径。默认`OUTPUT=‘output’`
 2. 自动生成系统架构图使用了[graphviz](http://www.graphviz.org/)，请先下载安装。然后在build.py中设定全局变量`DOT`，指定有向图生成工具的路径，在Windows下，默认`DOT = 'C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe'`。
 
