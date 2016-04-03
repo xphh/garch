@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<interfaces>
+		<interface id="api" type="http" front="upstream" name="业务API" />
+	</interfaces>
+	<functions>
+		<function id="auth" name="认证" />
+		<function id="client_process" name="客户端业务处理" />
+	</functions>
+	<actions>
+		<action interface="api" name="客户端请求">
+			<function id="auth" />
+			<function id="client_process" />
+			<interface to="cloud.devicemgr.api" />
+		</action>
+	</actions>
+</module>

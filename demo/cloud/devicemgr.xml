@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<interfaces>
+		<interface id="connection" type="tcp" front="slb" name="设备长连接" />
+		<interface id="api" type="http" name="设备信令" />
+	</interfaces>
+	<functions>
+		<function id="auth" name="认证设备" />
+		<function id="update_status" name="更新状态" />
+		<function id="send_cmd" name="向设备发送命令" />
+	</functions>
+	<actions>
+		<action interface="connection" name="设备上线">
+			<function id="auth" />
+			<function id="update_status" />
+			<interface to="cloud.pushserver.api" />
+		</action>
+		<action interface="api" name="设备信令">
+			<function id="send_cmd" />
+		</action>
+	</actions>
+</module>

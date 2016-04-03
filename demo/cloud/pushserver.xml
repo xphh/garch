@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<interfaces>
+		<interface id="api" type="http" name="推送接口" />
+		<interface id="connection" type="tcp" name="推送长连接" />
+	</interfaces>
+	<functions>
+		<function id="auth" name="认证" />
+		<function id="push_message" name="推送消息到客户端" />
+	</functions>
+	<actions>
+		<action interface="connection" name="客户端上线">
+			<function id="auth" />
+		</action>
+		<action interface="api" name="推送消息">
+			<function id="push_message" />
+		</action>
+	</actions>
+</module>

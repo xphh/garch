@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<interfaces>
+		<interface id="client_api" type="http" front="slb" name="客户端API" />
+		<interface id="device_api" type="http" front="slb" name="设备报警API" />
+	</interfaces>
+	<functions>
+		<function id="lb" name="负载均衡" />
+		<function id="url_rewrite" name="URL改写" />
+	</functions>
+	<actions>
+		<action interface="client_api" name="业务">
+			<function id="lb" />
+			<function id="url_rewrite" />
+			<interface to="cloud.services.api" />
+		</action>
+		<action interface="device_api" name="设备报警">
+			<interface to="cloud.pushserver.api" />
+		</action>
+	</actions>
+</module>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<interfaces>
+		<interface id="service" name="客户端" />
+	</interfaces>
+	<functions>
+	</functions>
+	<actions>
+		<action interface="service" name="上线">
+			<interface to="cloud.pushserver.connection" />
+		</action>
+		<action interface="service" name="业务">
+			<interface to="cloud.nginx.client_api" />
+		</action>
+	</actions>
+</module>

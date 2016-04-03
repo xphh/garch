@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<main title="demo系统架构">
+	<group id="cloud" name="云端" scope="center">
+		<module id="nginx" name="Nginx" />
+		<module id="services" name="业务服务" />
+		<module id="devicemgr" name="设备管理服务" />
+		<module id="pushserver" name="推送服务" />
+	</group>
+	<group id="endpoint" name="终端" scope="endpoint">
+		<module id="client" name="客户端" />
+		<module id="device" name="设备" />
+	</group>
+</main>

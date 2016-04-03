@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<interfaces>
+		<interface id="local" name="设备" />
+	</interfaces>
+	<functions>
+	</functions>
+	<actions>
+		<action interface="local" name="上线">
+			<interface to="cloud.devicemgr.connection" />
+		</action>
+		<action interface="local" name="报警">
+			<interface to="cloud.nginx.device_api" />
+		</action>
+	</actions>
+</module>
