@@ -15,6 +15,4 @@
 1. 需要在build.py中设定全局变量`OUTPUT`，用于指定文档输出路径。默认`OUTPUT=‘output’`
 2. 自动生成系统架构图使用了[graphviz](http://www.graphviz.org/)，请先下载安装。然后在build.py中设定全局变量`DOT`，指定有向图生成工具的路径，在Windows下，默认`DOT = 'C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe'`。
 
-下图是自动生成的总体架构图示例，供观摩：
-
-![](main.gv.png)
+output目录是用demo生成的，仅供观摩。

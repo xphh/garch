@@ -1,0 +1,38 @@
+digraph G {
+edge[fontname="simsun"];
+node[fontname="simsun"];
+graph[fontname="simsun"];
+label = "";
+subgraph cluster_main_node_0 {
+style = filled;
+color = lightgrey;
+label = "云端";
+cloud_node_0[shape=box, label="Nginx"];
+cloud_node_1[shape=box, label="业务服务"];
+cloud_node_2[shape=box, label="设备管理服务"];
+cloud_node_3[shape=box, label="推送服务"];
+}
+subgraph cluster_main_node_1 {
+style = filled;
+color = lightgrey;
+label = "终端";
+endpoint_node_0[shape=box, label="客户端"];
+endpoint_node_1[shape=box, label="设备"];
+}
+main_node_2[height=.3, fixedsize=true, label="upstream"];
+main_node_2->cloud_node_1;
+cloud_node_0->main_node_2[fontsize=9, label="业务API\n[http]"];
+cloud_node_0->cloud_node_3[fontsize=9, label="推送接口\n[http]"];
+cloud_node_1->cloud_node_2[fontsize=9, label="设备信令\n[http]"];
+cloud_node_2->cloud_node_3[fontsize=9, label="推送接口\n[http]"];
+endpoint_node_0->cloud_node_3[fontsize=9, label="推送长连接\n[tcp]"];
+main_node_3[height=.3, fixedsize=true, label="slb"];
+main_node_3->cloud_node_0;
+endpoint_node_0->main_node_3[fontsize=9, label="客户端API\n[http]"];
+main_node_4[height=.3, fixedsize=true, label="slb"];
+main_node_4->cloud_node_2;
+endpoint_node_1->main_node_4[fontsize=9, label="设备长连接\n[tcp]"];
+main_node_5[height=.3, fixedsize=true, label="slb"];
+main_node_5->cloud_node_0;
+endpoint_node_1->main_node_5[fontsize=9, label="设备报警API\n[http]"];
+}

@@ -1,0 +1,15 @@
+digraph G {
+edge[fontname="simsun"];
+node[fontname="simsun"];
+graph[fontname="simsun"];
+label = "";
+services_node_0[shape=box, peripheries=2, label="业务服务"];
+services_node_1[shape=circle, width=.2, style=filled, label=""];
+services_node_2[height=.3, fixedsize=true, label="upstream"];
+services_node_2->services_node_0;
+services_node_1->services_node_2[fontsize=9, label="业务API\n[http]"];
+services_node_3[shape=polygon, skew=.5, style=filled, label="客户端请求"];
+services_node_0->services_node_3[style=bold, arrowhead=none];
+services_node_4[shape=box, label="设备管理服务"];
+services_node_3->services_node_4[fontsize=9, label="设备信令\n[http]"];
+}

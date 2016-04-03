@@ -1,0 +1,25 @@
+digraph G {
+edge[fontname="simsun"];
+node[fontname="simsun"];
+graph[fontname="simsun"];
+label = "";
+nginx_node_0[shape=box, peripheries=2, label="Nginx"];
+nginx_node_1[shape=circle, width=.2, style=filled, label=""];
+nginx_node_2[height=.3, fixedsize=true, label="slb"];
+nginx_node_2->nginx_node_0;
+nginx_node_1->nginx_node_2[fontsize=9, label="客户端API\n[http]"];
+nginx_node_3[shape=circle, width=.2, style=filled, label=""];
+nginx_node_4[height=.3, fixedsize=true, label="slb"];
+nginx_node_4->nginx_node_0;
+nginx_node_3->nginx_node_4[fontsize=9, label="设备报警API\n[http]"];
+nginx_node_5[shape=polygon, skew=.5, style=filled, label="业务"];
+nginx_node_0->nginx_node_5[style=bold, arrowhead=none];
+nginx_node_6[shape=box, label="业务服务"];
+nginx_node_7[height=.3, fixedsize=true, label="upstream"];
+nginx_node_7->nginx_node_6;
+nginx_node_5->nginx_node_7[fontsize=9, label="业务API\n[http]"];
+nginx_node_8[shape=polygon, skew=.5, style=filled, label="设备报警"];
+nginx_node_0->nginx_node_8[style=bold, arrowhead=none];
+nginx_node_9[shape=box, label="推送服务"];
+nginx_node_8->nginx_node_9[fontsize=9, label="推送接口\n[http]"];
+}

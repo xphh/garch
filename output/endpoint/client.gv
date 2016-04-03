@@ -1,0 +1,19 @@
+digraph G {
+edge[fontname="simsun"];
+node[fontname="simsun"];
+graph[fontname="simsun"];
+label = "";
+client_node_0[shape=box, peripheries=2, label="客户端"];
+client_node_1[shape=circle, width=.2, style=filled, label=""];
+client_node_1->client_node_0[fontsize=9, label="客户端"];
+client_node_2[shape=polygon, skew=.5, style=filled, label="上线"];
+client_node_0->client_node_2[style=bold, arrowhead=none];
+client_node_3[shape=box, label="推送服务"];
+client_node_2->client_node_3[fontsize=9, label="推送长连接\n[tcp]"];
+client_node_4[shape=polygon, skew=.5, style=filled, label="业务"];
+client_node_0->client_node_4[style=bold, arrowhead=none];
+client_node_5[shape=box, label="Nginx"];
+client_node_6[height=.3, fixedsize=true, label="slb"];
+client_node_6->client_node_5;
+client_node_4->client_node_6[fontsize=9, label="客户端API\n[http]"];
+}
