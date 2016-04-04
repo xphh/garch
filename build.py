@@ -138,6 +138,57 @@ def build_main_graph(main):
 	# link all interfaces
 	for group in main.findall('group'):
 		for module in group.findall('module'):
+			for [to, output] in module.outputs.items():
+				to_interface = output['interface']
+				type = to_interface.attrib.get('type')
+				ag.linkInterface(module.graph_node, to_interface.graph_node, to_interface.attrib['name'], type)
+	ag.output('main')
+
+def build_module_graph(main, group, module):
+	ag = ArchGraph('module', '')
+	mg = ArchGraph(module.attrib['id'], '')
+	module_node = mg.addCurrentModule(module.attrib['name'])
+	# draw all interfaces
+	for interface in module.content.findall('./interfaces/interface'):
+		starter_node = ag.addStarter()
+		label = interface.attrib['name']
+		type = interface.attrib.get('type')
+		front = interface.attrib.get('front')
+		if_node = ag.addInterface(module_node, front)
+		ag.linkInterface(starter_node, if_node, label, type)
+	# draw all outputs 
+	for [to, output] in module.outputs.items():
+		to_module = output['module']
+		to_interface = output['interface']
+		to_module_node = ag.addModule(to_module.attrib['name'])
+		front = to_interface.attrib.get('front')
+		to_interface.graph_node = ag.addInterface(to_module_node, front)
+	# draw all actions and link to outputs
+	for action in module.content.findall('./actions/action'):
+		action_node = mg.addAction(module_node, action.attrib['name'])
+		for a_interface in action.findall('interface'):
+			interface_to = a_interface.attrib['to']
+			output = module.outputs[interface_to]
+			to_interface = output['interface']
+			type = to_interface.attrib.get('type')
+			ag.linkInterface(action_node, to_interface.graph_node, to_interface.attrib['name'], type)
+	ag.addSubGraph(mg)
+	ag.output(group.attrib['id'] + '/' + module.attrib['id'])
+	
+def load_and_parse(main_file):
+	main_dir = os.path.dirname(main_file)
+	print('load modules')
+	main = ET.parse(main_file).getroot()
+	for group in main.findall('group'):
+		for module in group.findall('module'):
+			module_path = group.attrib['id'] + '/' + module.attrib['id']
+			print('load ' + module_path)
+			module_file = main_dir + '/' + module_path + '.xml'
+			module.content = ET.parse(module_file).getroot()
+	print('parse modules')
+	for group in main.findall('group'):
+		for module in group.findall('module'):
+			module.outputs = {}
 			for action in module.content.findall('./actions/action'):
 				for a_interface in action.findall('interface'):
 					interface_to = a_interface.attrib['to']
@@ -148,55 +199,19 @@ def build_main_graph(main):
 					to_module = to_group.find("./module[@id='" + to_module_id + "']")
 					to_interface_id = ifarr[2]
 					to_interface = to_module.content.find("./interfaces/interface[@id='" + to_interface_id + "']")
-					type = to_interface.attrib.get('type')
-					ag.linkInterface(module.graph_node, to_interface.graph_node, to_interface.attrib['name'], type)
-	ag.output('main')
-
-def build_module_graph(main, group, module):
-	ag = ArchGraph('module', '')
-	mg = ArchGraph(module.attrib['id'], '')
-	module_node = mg.addCurrentModule(module.attrib['name'])
-	for interface in module.content.findall('./interfaces/interface'):
-		starter_node = ag.addStarter()
-		label = interface.attrib['name']
-		type = interface.attrib.get('type')
-		front = interface.attrib.get('front')
-		if_node = ag.addInterface(module_node, front)
-		ag.linkInterface(starter_node, if_node, label, type)
-	for action in module.content.findall('./actions/action'):
-		action_node = mg.addAction(module_node, action.attrib['name'])
-		for a_interface in action.findall('interface'):
-			interface_to = a_interface.attrib['to']
-			ifarr = string.split(interface_to, '.')
-			to_group_id = ifarr[0]
-			to_group = main.find("./group[@id='" + to_group_id + "']")
-			to_module_id = ifarr[1]
-			to_module = to_group.find("./module[@id='" + to_module_id + "']")
-			to_interface_id = ifarr[2]
-			to_interface = to_module.content.find("./interfaces/interface[@id='" + to_interface_id + "']")
-			to_module_node = ag.addModule(to_module.attrib['name'])
-			type = to_interface.attrib.get('type')
-			front = to_interface.attrib.get('front')
-			if_node = ag.addInterface(to_module_node, front)
-			ag.linkInterface(action_node, if_node, to_interface.attrib['name'], type)
-	ag.addSubGraph(mg)
-	ag.output(group.attrib['id'] + '/' + module.attrib['id'])
+					output = {}
+					output['group'] = to_group
+					output['module'] = to_module
+					output['interface'] = to_interface
+					module.outputs[interface_to] = output
+	return main
 	
 if __name__ == '__main__':
 	if len(sys.argv) != 2:
 		print('Usage: build.py path/to/modules/main.xml')
 		sys.exit(-1)
-	main_file = sys.argv[1]
-	main_dir = os.path.dirname(main_file)
 	# load all modules
-	print('load main')
-	main = ET.parse(main_file).getroot()
-	for group in main.findall('group'):
-		for module in group.findall('module'):
-			module_path = group.attrib['id'] + '/' + module.attrib['id']
-			print('load ' + module_path)
-			module_file = main_dir + '/' + module_path + '.xml'
-			module.content = ET.parse(module_file).getroot()
+	main = load_and_parse(sys.argv[1])
 	# build markdown	
 	print('building main')
 	build_main(main)
@@ -204,6 +219,7 @@ if __name__ == '__main__':
 	build_main_graph(main)
 	for group in main.findall('group'):
 		for module in group.findall('module'):
+			module_path = group.attrib['id'] + '/' + module.attrib['id']
 			print('building ' + module_path)
 			build_module(main, group, module)
 			print('building ' + module_path + ' graph')

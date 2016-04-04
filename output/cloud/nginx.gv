@@ -11,12 +11,12 @@ module_node_2[shape=circle, width=.2, style=filled, label=""];
 module_node_3[height=.3, fixedsize=true, label="slb"];
 module_node_3->nginx_node_0;
 module_node_2->module_node_3[fontsize=9, label="设备报警API\n[http]"];
-module_node_4[shape=box, label="业务服务"];
-module_node_5[height=.3, fixedsize=true, label="upstream"];
-module_node_5->module_node_4;
-nginx_node_1->module_node_5[fontsize=9, label="业务API\n[http]"];
-module_node_6[shape=box, label="推送服务"];
-nginx_node_2->module_node_6[fontsize=9, label="推送接口\n[http]"];
+module_node_4[shape=box, label="推送服务"];
+module_node_5[shape=box, label="业务服务"];
+module_node_6[height=.3, fixedsize=true, label="upstream"];
+module_node_6->module_node_5;
+nginx_node_1->module_node_6[fontsize=9, label="业务API\n[http]"];
+nginx_node_2->module_node_4[fontsize=9, label="推送接口\n[http]"];
 subgraph cluster_module_node_7 {
 style = filled;
 color = lightgrey;

@@ -9,7 +9,10 @@
 		<action interface="service" name="上线">
 			<interface to="cloud.pushserver.connection" />
 		</action>
-		<action interface="service" name="业务">
+		<action interface="service" name="业务1">
+			<interface to="cloud.nginx.client_api" />
+		</action>
+		<action interface="service" name="业务2">
 			<interface to="cloud.nginx.client_api" />
 		</action>
 	</actions>

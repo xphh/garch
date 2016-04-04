@@ -27,12 +27,12 @@ label = "终端";
 endpoint_node_0[shape=box, label="客户端"];
 endpoint_node_1[shape=box, label="设备"];
 }
-cloud_node_0->cloud_node_4[fontsize=9, label="业务API\n[http]"];
 cloud_node_0->cloud_node_7[fontsize=9, label="推送接口\n[http]"];
+cloud_node_0->cloud_node_4[fontsize=9, label="业务API\n[http]"];
 cloud_node_3->cloud_node_5[fontsize=9, label="设备信令\n[http]"];
 cloud_node_5->cloud_node_7[fontsize=9, label="推送接口\n[http]"];
-endpoint_node_0->cloud_node_7[fontsize=9, label="推送长连接\n[tcp]"];
 endpoint_node_0->cloud_node_1[fontsize=9, label="客户端API\n[http]"];
+endpoint_node_0->cloud_node_7[fontsize=9, label="推送长连接\n[tcp]"];
 endpoint_node_1->cloud_node_6[fontsize=9, label="设备长连接\n[tcp]"];
 endpoint_node_1->cloud_node_2[fontsize=9, label="设备报警API\n[http]"];
 }

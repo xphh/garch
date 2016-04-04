@@ -8,10 +8,10 @@ module_node_0->device_node_0[fontsize=9, label="设备"];
 module_node_1[shape=box, label="设备管理服务"];
 module_node_2[height=.3, fixedsize=true, label="slb"];
 module_node_2->module_node_1;
-device_node_1->module_node_2[fontsize=9, label="设备长连接\n[tcp]"];
 module_node_3[shape=box, label="Nginx"];
 module_node_4[height=.3, fixedsize=true, label="slb"];
 module_node_4->module_node_3;
+device_node_1->module_node_2[fontsize=9, label="设备长连接\n[tcp]"];
 device_node_2->module_node_4[fontsize=9, label="设备报警API\n[http]"];
 subgraph cluster_module_node_5 {
 style = filled;

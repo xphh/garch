@@ -5,12 +5,13 @@ graph[fontname="simsun"];
 label = "";
 module_node_0[shape=circle, width=.2, style=filled, label=""];
 module_node_0->client_node_0[fontsize=9, label="客户端"];
-module_node_1[shape=box, label="推送服务"];
-client_node_1->module_node_1[fontsize=9, label="推送长连接\n[tcp]"];
-module_node_2[shape=box, label="Nginx"];
-module_node_3[height=.3, fixedsize=true, label="slb"];
-module_node_3->module_node_2;
-client_node_2->module_node_3[fontsize=9, label="客户端API\n[http]"];
+module_node_1[shape=box, label="Nginx"];
+module_node_2[height=.3, fixedsize=true, label="slb"];
+module_node_2->module_node_1;
+module_node_3[shape=box, label="推送服务"];
+client_node_1->module_node_3[fontsize=9, label="推送长连接\n[tcp]"];
+client_node_2->module_node_2[fontsize=9, label="客户端API\n[http]"];
+client_node_3->module_node_2[fontsize=9, label="客户端API\n[http]"];
 subgraph cluster_module_node_4 {
 style = filled;
 color = lightgrey;
@@ -18,7 +19,9 @@ label = "";
 client_node_0[shape=box, peripheries=2, label="客户端"];
 client_node_1[shape=polygon, skew=.5, label="上线"];
 client_node_0->client_node_1[style=bold, arrowhead=none];
-client_node_2[shape=polygon, skew=.5, label="业务"];
+client_node_2[shape=polygon, skew=.5, label="业务1"];
 client_node_0->client_node_2[style=bold, arrowhead=none];
+client_node_3[shape=polygon, skew=.5, label="业务2"];
+client_node_0->client_node_3[style=bold, arrowhead=none];
 }
 }
