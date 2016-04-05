@@ -177,6 +177,8 @@ def build_module_graph(main, group, module):
 	
 def load_and_parse(main_file):
 	main_dir = os.path.dirname(main_file)
+	if main_dir == '':
+		main_dir = './'
 	print('load modules')
 	main = ET.parse(main_file).getroot()
 	for group in main.findall('group'):
