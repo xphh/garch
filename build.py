@@ -22,7 +22,13 @@ def output2file(filename, content):
 	return filename
 	
 def build_main(main):
+	ag = build_main_graph(main)
+	info_number = '> Modules`%d` Interfaces`%d` Links`%d`\n' % (ag.mod_num, ag.if_num, ag.link_num)
+	info_mc = '> * Module Complexity `%.3f`\n' % (float(ag.if_num) / ag.mod_num)
+	info_ic = '> * Interface Complexity `%.3f`\n' % (float(ag.link_num) / ag.if_num)
+	info_ac = '> * Architecture Complexity `%.3f`\n' % (float(ag.link_num) / ag.mod_num)
 	md = '# ' + main.attrib['title'] + '\n'
+	md += '\n' + info_number + '\n' + info_mc +  '\n' + info_ic +  '\n' + info_ac + '\n'
 	md += '\n![](main.gv.png)\n'
 	for group in main.findall('group'):
 		md += '\n### Group ' + group.attrib['name'] + ' `' + group.attrib['scope'] + '`\n\n'
@@ -31,6 +37,7 @@ def build_main(main):
 	output2file('Home.md', md);
 	
 def build_module(main, group, module):
+	ag = build_module_graph(main, group, module)
 	md = '# [' + main.attrib['title'] + '](../Home.md) - ' + module.attrib['name'] + '\n'
 	md += '\n![](' + module.attrib['id'] + '.gv.png)\n'
 	for action in module.content.findall('./actions/action'):
@@ -65,6 +72,9 @@ class ArchGraph:
 	gv = ''
 	id = ''
 	name = ''
+	mod_num = 0
+	if_num = 0
+	link_num = 0
 	def __init__(self, id, name):
 		self.id = id
 		self.name = name
@@ -78,6 +88,7 @@ class ArchGraph:
 		self.gv += n + '[shape=circle, width=.2, style=filled, label=""];\n'
 		return n
 	def addModule(self, label):
+		self.mod_num += 1
 		n = self.getNode()
 		self.gv += n + '[shape=box, label="' + label + '"];\n'
 		return n
@@ -91,6 +102,7 @@ class ArchGraph:
 		self.gv += module + '->' + n + '[style=bold, arrowhead=none];\n'
 		return n
 	def addInterface(self, module, front):
+		self.if_num += 1
 		if front != None:
 			n = self.getNode()
 			self.gv += n + '[height=.3, fixedsize=true, label="' + front + '"];\n'
@@ -99,10 +111,14 @@ class ArchGraph:
 		else:
 			return module
 	def linkInterface(self, module, to, label, type):
+		self.link_num += 1
 		if type != None:
 			label += '\\n[' + type + ']'
 		self.gv += module + '->' + to + '[fontsize=9, label="' + label + '"];\n'
 	def addSubGraph(self, graph):
+		self.mod_num += graph.mod_num
+		self.if_num += graph.if_num
+		self.link_num += graph.link_num
 		n = self.getNode()
 		self.gv += 'subgraph cluster_' + n + ' {\n'
 		self.gv += 'style = filled;\n'
@@ -143,6 +159,7 @@ def build_main_graph(main):
 				type = to_interface.attrib.get('type')
 				ag.linkInterface(module.graph_node, to_interface.graph_node, to_interface.attrib['name'], type)
 	ag.output('main')
+	return ag
 
 def build_module_graph(main, group, module):
 	ag = ArchGraph('module', '')
@@ -174,6 +191,7 @@ def build_module_graph(main, group, module):
 			ag.linkInterface(action_node, to_interface.graph_node, to_interface.attrib['name'], type)
 	ag.addSubGraph(mg)
 	ag.output(group.attrib['id'] + '/' + module.attrib['id'])
+	return ag
 	
 def load_and_parse(main_file):
 	main_dir = os.path.dirname(main_file)
@@ -217,13 +235,9 @@ if __name__ == '__main__':
 	# build markdown	
 	print('building main')
 	build_main(main)
-	print('building main graph')
-	build_main_graph(main)
 	for group in main.findall('group'):
 		for module in group.findall('module'):
 			module_path = group.attrib['id'] + '/' + module.attrib['id']
 			print('building ' + module_path)
 			build_module(main, group, module)
-			print('building ' + module_path + ' graph')
-			build_module_graph(main, group, module)
 	
