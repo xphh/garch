@@ -1,5 +1,14 @@
 # demo系统架构
 
+> Modules`6` Interfaces`9` Links`8`
+
+> * Module Complexity `1.500`
+
+> * Interface Complexity `0.889`
+
+> * Architecture Complexity `1.333`
+
+
 ![](main.gv.png)
 
 ### Group 云端 `center`
